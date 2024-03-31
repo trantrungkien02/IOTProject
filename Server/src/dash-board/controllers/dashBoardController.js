@@ -37,7 +37,6 @@ class dashBoardController {
             break;
         }
       } else {
-        // Thứ tự mặc định
         order = [['id', 'ASC']];
       }
 
@@ -61,12 +60,9 @@ class dashBoardController {
 
       let whereCondition = {};
 
-      // Nếu có trường field được chọn, thêm điều kiện tìm kiếm theo trường đó
       if (field != 'all' && value) {
-        // Kiểm tra nếu trường field là một trong các trường string
         whereCondition[field] = { [Sequelize.Op.substring]: value };
       } else if (field === 'all' && value) {
-        // Nếu không có trường field được chọn, thực hiện tìm kiếm theo ký tự trên toàn bộ database
         whereCondition = {
           [Sequelize.Op.or]: [
             { id: { [Sequelize.Op.substring]: value } },
@@ -77,9 +73,8 @@ class dashBoardController {
         };
       }
 
-      // Tính toán limit và offset cho phân trang
-      const limit = pageSize ? parseInt(pageSize) : 10; // Số lượng mục trên mỗi trang, mặc định là 10 nếu không được cung cấp
-      const offset = page ? (parseInt(page) - 1) * limit : 0; // Số lượng mục bỏ qua, mặc định là 0 nếu không được cung cấp
+      const limit = pageSize ? parseInt(pageSize) : 10;
+      const offset = page ? (parseInt(page) - 1) * limit : 0; 
 
       const SensorData = await dataSensor();
       const sensorData = await SensorData.findAll({

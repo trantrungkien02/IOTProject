@@ -3,11 +3,11 @@ const { connect } = require('../../config/db/connectdb');
 
 async function actionHistory() {
   try {
-    const url = await connect(); // Lấy URL của cơ sở dữ liệu MySQL từ hàm connect()
+    const url = await connect(); 
     const sequelize = new Sequelize(url, {
       dialectOptions: {
-        useUTC: false, // Tắt sử dụng múi giờ UTC
-        timezone: '+07:00', // Đặt múi giờ địa phương của bạn
+        useUTC: false, 
+        timezone: '+07:00', 
       },
     });
 
@@ -20,7 +20,7 @@ async function actionHistory() {
           autoIncrement: true,
         },
         deviceName: {
-          type: DataTypes.STRING, // Kiểu varchar
+          type: DataTypes.STRING, 
           allowNull: false,
         },
         action: {
@@ -34,7 +34,7 @@ async function actionHistory() {
         },
       },
       {
-        timestamps: false, // Tắt chức năng tự động thêm `createdAt` và `updatedAt`
+        timestamps: false, 
       },
     );
 

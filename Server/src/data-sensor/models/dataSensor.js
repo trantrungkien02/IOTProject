@@ -3,7 +3,7 @@ const { connect } = require('../../config/db/connectdb');
 
 async function dataSensor() {
   try {
-    const url = await connect(); // Lấy URL của cơ sở dữ liệu MySQL từ hàm connect()
+    const url = await connect(); 
     const sequelize = new Sequelize(url);
     console.log(sequelize);
 
@@ -33,7 +33,7 @@ async function dataSensor() {
         },
       },
       {
-        timestamps: false, // Tắt chức năng tự động thêm `createdAt` và `updatedAt`
+        timestamps: false, 
       },
     );
 

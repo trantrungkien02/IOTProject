@@ -17,5 +17,5 @@
 .env.production.local
 
 # Ignore node_modules only in client and server directories
-client/node_modules/
-server/node_modules/
+Client/node_modules/
+Server/node_modules/

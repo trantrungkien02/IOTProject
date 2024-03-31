@@ -9,7 +9,6 @@ class dataSensorController {
       const sizePerPage = parseInt(pageSize) || 10;
       let orderCriteria = [];
 
-      // Xác định tiêu chí sắp xếp nếu có
       switch (orderBy) {
         case 'id_ASC':
           orderCriteria = [['id', 'ASC']];
@@ -56,12 +55,9 @@ class dataSensorController {
 
       let whereCondition = {};
 
-      // Nếu có trường field được chọn, thêm điều kiện tìm kiếm theo trường đó
       if (field != 'all' && value) {
-        // Kiểm tra nếu trường field là một trong các trường string
         whereCondition[field] = { [Sequelize.Op.substring]: value };
       } else if (field === 'all' && value) {
-        // Nếu không có trường field được chọn, thực hiện tìm kiếm theo ký tự trên toàn bộ database
         whereCondition = {
           [Sequelize.Op.or]: [
             { id: { [Sequelize.Op.substring]: value } },
@@ -73,9 +69,8 @@ class dataSensorController {
         };
       }
 
-      // Tính toán limit và offset cho phân trang
-      const limit = pageSize ? parseInt(pageSize) : 10; // Số lượng mục trên mỗi trang, mặc định là 10 nếu không được cung cấp
-      const offset = page ? (parseInt(page) - 1) * limit : 0; // Số lượng mục bỏ qua, mặc định là 0 nếu không được cung cấp
+      const limit = pageSize ? parseInt(pageSize) : 10; 
+      const offset = page ? (parseInt(page) - 1) * limit : 0; 
 
       const SensorData = await dataSensor();
       const sensorData = await SensorData.findAll({
@@ -96,68 +91,57 @@ class dataSensorController {
 
   async create(req, res, next) {
     try {
-      // Lấy đủ dữ liệu từ yêu cầu
       const SensorData = await dataSensor();
       const { temperature, humidity, light } = req.body;
       console.log(req.body);
-      // Thêm dữ liệu mới vào cơ sở dữ liệu
       const newSensorData = await SensorData.create({
         temperature,
         humidity,
         light,
       });
 
-      // Trả về dữ liệu mới đã tạo dưới dạng JSON
       res.status(201).json(newSensorData);
     } catch (error) {
-      next(error); // Chuyển tiếp lỗi nếu có
+      next(error);
     }
   }
 
   async update(req, res, next) {
     try {
-      // Lấy đủ dữ liệu từ yêu cầu
       const { id } = req.params;
       const { temperature, humidity, light } = req.body;
 
-      // Kiểm tra xem datasensor có tồn tại không
       const SensorData = await dataSensor();
       const existingSensorData = await SensorData.findByPk(id);
       if (!existingSensorData) {
         return res.status(404).json({ error: 'Datasensor not found' });
       }
 
-      // Cập nhật dữ liệu
       existingSensorData.temperature = temperature;
       existingSensorData.humidity = humidity;
       existingSensorData.light = light;
       await existingSensorData.save();
 
-      // Trả về dữ liệu đã cập nhật dưới dạng JSON
       res.json(existingSensorData);
     } catch (error) {
-      next(error); // Chuyển tiếp lỗi nếu có
+      next(error); 
     }
   }
   async delete(req, res, next) {
     try {
-      // Lấy id từ yêu cầu
       const { id } = req.params;
 
-      // Kiểm tra xem datasensor có tồn tại không
       const SensorData = await dataSensor();
       const existingSensorData = await SensorData.findByPk(id);
       if (!existingSensorData) {
         return res.status(404).json({ error: 'Datasensor not found' });
       }
 
-      // Xóa datasensor
       await existingSensorData.destroy();
 
-      // Trả về thông báo xóa thành công
       res.json({ message: 'Datasensor deleted successfully' });
     } catch (error) {
-      next(error); // Chuyển tiếp lỗi nếu có
+      next(error);
     }
   }
 }
